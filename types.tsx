@@ -3,6 +3,12 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
+export type AppNavList = AuthParameterList | RootStackParamList;
+
+export type AuthParameterList = {
+  Auth: undefined;
+};
+
 export type RootStackParamList = {
   Root: undefined;
   NotFound: undefined;
