@@ -5,15 +5,24 @@ import { Image } from "react-native";
 import { Text, View } from "../components/Themed";
 import ProfileCard from "../components/ProfileCard";
 import WalletInfo from "../components/WalletInfo";
+import AccountContext from "../app";
+import AuthScreen from "./AuthScreen";
 
 export default function ProfileScreen() {
+  const { account, setAccount } = React.useContext(AccountContext);
+
   return (
     <View>
       <ProfileCard />
-      <Text style={styles.subTitle}>Wallet Info</Text>
-
-      <WalletInfo />
-      <Text style={styles.title}>Your Fund Raisers</Text>
+      {!account ? (
+        <AuthScreen />
+      ) : (
+        <>
+          <Text style={styles.subTitle}>Wallet Info</Text>
+          <WalletInfo />
+          <Text style={styles.title}>Your Fund Raisers</Text>
+        </>
+      )}
     </View>
   );
 }

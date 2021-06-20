@@ -1,26 +1,27 @@
 import * as React from "react";
-import { Button, StyleSheet, TextInput } from "react-native";
-import { Card } from "react-native-paper";
+import { StyleSheet, TextInput } from "react-native";
 import { Image, TouchableOpacity } from "react-native";
+import AccountContext from "../app";
 import { Text, View } from "../components/Themed";
-import ProfileCard from "../components/ProfileCard";
-import WalletInfo from "../components/WalletInfo";
+import { connectWithCelo } from "../functions/functions";
 
-// @ts-ignore
-import { celo } from "../assets/images/celo-logo.png";
+type Props = {
+  setAccount: (account: Account) => void;
+};
 
 const AuthScreen: React.FunctionComponent<{}> = () => {
-  const [nickName, setNickName] = React.useState("");
+  const [nickName, setNickName] = React.useState<string>();
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to</Text>
       <Text style={styles.subtitle}>Fund Me Coin</Text>
-      <View style={{ height: 80 }} />
+      <View style={{ height: 20 }} />
 
       <Text style={styles.text}>Enter a Nick Name</Text>
       <TextInput
         style={styles.input}
-        onChangeText={setNickName}
+        onChangeText={(text) => setNickName(text)}
         value={nickName}
         placeholder="Nick Name"
         keyboardType="default"
@@ -28,7 +29,26 @@ const AuthScreen: React.FunctionComponent<{}> = () => {
       <View style={{ height: 10 }} />
       <Text style={styles.text}>Connect With</Text>
       <View style={{ height: 5 }} />
-      <TouchableOpacity style={styles.button} onPress={() => {}}>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          if (nickName != null && nickName.length != 0) {
+            console.log("called BEFORE");
+
+            connectWithCelo(nickName)
+              .then((acc) => {
+                console.log("called AFTER", acc);
+
+                // console.debug(acc);
+                // setAccount!(acc);
+              })
+              .catch((err) => {
+                console.debug(err);
+              });
+          }
+        }}
+      >
         <Image
           style={styles.Image}
           resizeMode="contain"
@@ -43,7 +63,7 @@ export default AuthScreen;
 
 const styles = StyleSheet.create({
   input: {
-    height: "6%",
+    height: "10%",
     color: "white",
     padding: 10,
     margin: 12,
@@ -71,7 +91,7 @@ const styles = StyleSheet.create({
   },
   container: {
     margin: 20,
-    flex: 1,
+    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
