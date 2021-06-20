@@ -228,7 +228,7 @@ export default function App() {
   return (
     <AccountContext.Provider value={{ account, setAccount: setAcc }}>
       <View style={styles.container}>
-        {account ? <HomeScreen /> : <AuthScreen />}
+        {!account ? <HomeScreen /> : <AuthScreen />}
       </View>
     </AccountContext.Provider>
   );
