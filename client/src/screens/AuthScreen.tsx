@@ -58,7 +58,7 @@ const AuthScreen: React.FunctionComponent<{}> = () => {
       address: dappkitResponse.address,
       cUSDBalance,
       phone: dappkitResponse.phoneNumber,
-      name: nickName,
+      nickName,
     };
 
     setAccount(account);

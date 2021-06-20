@@ -211,6 +211,10 @@ import "./global";
 import AccountContext from "./src/context/account";
 import AuthScreen from "./src/screens/AuthScreen";
 import HomeScreen from "./src/screens/HomeScreen";
+import "react-native-gesture-handler";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import ProfileScreen from "./src/screens/ProfileScreen";
 
 YellowBox.ignoreWarnings([
   "Warning: The provided value 'moz",
@@ -225,11 +229,29 @@ export default function App() {
     setAccount(acc);
     console.debug("called");
   }
+
+  const Stack = createStackNavigator<NavigationProps>();
+
+  if (account)
+    return (
+      <AccountContext.Provider value={{ account, setAccount: setAcc }}>
+        <View style={styles.container}>
+          <AuthScreen />
+        </View>
+      </AccountContext.Provider>
+    );
+
   return (
     <AccountContext.Provider value={{ account, setAccount: setAcc }}>
+      {/* <NavigationContainer> */}
       <View style={styles.container}>
-        {!account ? <HomeScreen /> : <AuthScreen />}
+        {/* <Stack.Navigator>
+            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+          </Stack.Navigator> */}
+        <HomeScreen />
       </View>
+      {/* </NavigationContainer> */}
     </AccountContext.Provider>
   );
 }
