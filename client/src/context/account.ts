@@ -9,3 +9,7 @@ const AccountContext = React.createContext<{
 });
 
 export default AccountContext;
+
+const ContractContext = React.createContext<{} | null>(null);
+
+export { ContractContext };

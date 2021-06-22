@@ -9,9 +9,8 @@ export default function ProfileScreen() {
   const { account, setAccount } = React.useContext(AccountContext);
 
   return (
-    <View>
+    <View >
       <ProfileCard />
-
       <Text style={styles.subTitle}>Wallet Info</Text>
       <WalletInfo />
       <Text style={styles.title}>Your Fund Raisers</Text>

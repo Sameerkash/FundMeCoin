@@ -1,6 +1,5 @@
 // import React from "react";
 // import "./global";
-// import { web3, kit } from "./root";
 // import {
 //   Image,
 //   StyleSheet,
@@ -19,7 +18,6 @@
 // } from "@celo/dappkit";
 // import { toTxResult } from "@celo/connect";
 // import * as Linking from "expo-linking";
-// import HelloWorldContract from "./contracts/HelloWorld.json";
 
 // YellowBox.ignoreWarnings([
 //   "Warning: The provided value 'moz",
@@ -206,17 +204,20 @@
 // });
 
 import React from "react";
-import { StyleSheet, View, YellowBox } from "react-native";
+import { StyleSheet, View, LogBox } from "react-native";
 import "./global";
-import AccountContext from "./src/context/account";
+import AccountContext, { ContractContext } from "./src/context/account";
 import AuthScreen from "./src/screens/AuthScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import ProfileScreen from "./src/screens/ProfileScreen";
+import { web3, kit } from "./root";
+import { AbiItem } from "@celo/connect";
+const FundMeCoin = require("./contracts/FundMeCoin.json");
 
-YellowBox.ignoreWarnings([
+LogBox.ignoreLogs([
   "Warning: The provided value 'moz",
   "Warning: The provided value 'ms-stream",
   "Warning: The provided value 'scheme",
@@ -224,34 +225,56 @@ YellowBox.ignoreWarnings([
 
 export default function App() {
   const [account, setAccount] = React.useState<Account | null>(null);
+  const [contractInstance, setContract] = React.useState<{} | null>();
+
+  async function fetchContract() {
+    const networkId = await web3.eth.net.getId();
+
+    const deployedNetwork = FundMeCoin.networks[networkId];
+
+    const instance = new web3.eth.Contract(
+      FundMeCoin.abi as AbiItem[],
+      deployedNetwork && deployedNetwork.address
+    );
+
+    setContract(instance);
+  }
 
   function setAcc(acc: Account) {
     setAccount(acc);
     console.debug("called");
   }
 
+  React.useEffect(() => {
+    fetchContract();
+  }, []);
+
   const Stack = createStackNavigator<NavigationProps>();
 
-  if (account)
+  if (!account)
     return (
       <AccountContext.Provider value={{ account, setAccount: setAcc }}>
-        <View style={styles.container}>
-          <AuthScreen />
-        </View>
+        <ContractContext.Provider value={contractInstance}>
+          <View style={styles.container}>
+            <AuthScreen />
+          </View>
+        </ContractContext.Provider>
       </AccountContext.Provider>
     );
 
   return (
     <AccountContext.Provider value={{ account, setAccount: setAcc }}>
-      {/* <NavigationContainer> */}
-      <View style={styles.container}>
-        {/* <Stack.Navigator>
+      <ContractContext.Provider value={contractInstance}>
+        {/* <NavigationContainer> */}
+        <View style={styles.container}>
+          {/* <Stack.Navigator>
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           </Stack.Navigator> */}
-        <HomeScreen />
-      </View>
-      {/* </NavigationContainer> */}
+          <HomeScreen />
+        </View>
+        {/* </NavigationContainer> */}
+      </ContractContext.Provider>
     </AccountContext.Provider>
   );
 }
