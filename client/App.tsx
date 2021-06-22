@@ -271,7 +271,7 @@ export default function App() {
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           </Stack.Navigator> */}
-          <HomeScreen />
+          <ProfileScreen />
         </View>
         {/* </NavigationContainer> */}
       </ContractContext.Provider>

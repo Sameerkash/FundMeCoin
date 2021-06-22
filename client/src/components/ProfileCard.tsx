@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 import { Card, Text } from "react-native-paper";
 import { Image } from "react-native";
 
-
 const ProfileCard: React.FunctionComponent<{}> = () => {
   return (
     <Card>
@@ -29,8 +28,8 @@ type CardInfoProps = {
 const CardInfo: React.FunctionComponent<CardInfoProps> = ({ name, amount }) => {
   return (
     <Card.Content style={styles.container2}>
-      <Text>{name}</Text>
-      <Text>{amount}</Text>
+      <Text style={styles.headerText}>{name}</Text>
+      <Text style={styles.valueText}>{amount}</Text>
     </Card.Content>
   );
 };
@@ -42,8 +41,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     display: "flex",
     flexDirection: "row",
+    height: 200,
+    alignSelf: "stretch",
+    // width: "100%",
   },
   container2: {
+    alignSelf: "stretch",
     alignItems: "center",
     justifyContent: "center",
     display: "flex",
@@ -66,5 +69,15 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: 3,
     borderColor: "purple",
+  },
+
+  headerText: {
+    fontSize: 22,
+    fontWeight: "200",
+  },
+
+  valueText: {
+    fontSize: 24,
+    fontWeight: "bold",
   },
 });
